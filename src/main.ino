@@ -12,6 +12,10 @@
   int maxSleep = 1000;  //Max sleep time = 1 second
   int minSleep = 100;   //Min sleep time = 1/10 of a second
 
+  void calSleep();
+  void high();
+  void low();
+
   void setup() {
     pinMode(LED, OUTPUT);
     pinMode(dOutput, OUTPUT);
