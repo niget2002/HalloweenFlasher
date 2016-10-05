@@ -30,7 +30,7 @@
     delay(sleepTime);
   }
 
-  void calSleep(){
+  void calSleep(){    //Calculate sleep time based on analog input, max, and min values
     int voltage = analogRead(aInput);
     sleepTime=(maxSleep/minSleep)*voltage+minSleep;
   }
