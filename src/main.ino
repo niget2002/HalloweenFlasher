@@ -16,6 +16,7 @@
   int maxSleep = 1000;  //Max sleep time = 1 second
   int minSleep = 10;   //Min sleep time = 1/10 of a second
 
+
   void outLow();
   void outHigh();
 
@@ -24,38 +25,44 @@
     pinMode(dOutput, OUTPUT);
     pinMode(aInput, INPUT);
     Serial.begin(9600);
-    BT.begin(9600);
+    BT.begin(115200);
+    Serial.println("Hello");
   }
 
   void loop(){
-
     String t;
     int on=1;
     int sleepTime=1000;
-    int potOn=1;
-
+    int potOn=0;
+    while(1){
     if(potOn){
       sleepTime = map(analogRead(aInput), 0, 1023, minSleep, maxSleep);
     }
-    if(BT.available()){
-      while(BT.available() > 0){
+      if(BT.available()){
+      while(BT.available()){
         t += (char)BT.read();
       }
+      Serial.println(t);
       if(t == "on"){
         on=1;
+        Serial.println("LED ON");
       }
       if(t == "off"){
         outLow();
+        Serial.println("LED Off");
         on=0;
       }
-      if(t == "potOn"){
+      if(t == "po"){
         potOn=1;
+        Serial.println("POT On");
       }
-      if(t == "potOff"){
+      if(t == "pf"){
         potOn=0;
+        Serial.println("POT Off");
       }
       else {
         sleepTime = t.toInt();
+        Serial.println(t);
       }
       t = "";
     }
@@ -65,6 +72,11 @@
       outLow();
       delay(sleepTime);
     }
+    Serial.println(sleepTime);
+    Serial.println(on);
+    Serial.println(potOn);
+    delay(1000);
+  }
   }
 
   void outHigh(){
