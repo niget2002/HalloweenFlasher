@@ -13,8 +13,8 @@ SoftwareSerial BT(10,11);
 #define LED  13
 
 int dOutput[3] = {2, 3, 4};
-int sleepTime[3] = {500, 500, 500};  //Default sleep time equates to half a second
-int onTime[3] = {500, 500, 500};
+int sleepTime[3] = {100, 500, 500};  //Default sleep time equates to half a second
+int onTime[3] = {100, 500, 500};
 int maxSleep = 1000;  //Max sleep time = 1 second
 int minSleep = 10;   //Min sleep time = 1/10 of a second
 
@@ -23,6 +23,7 @@ int onAddress = 10;
 int potAddress = 20;
 unsigned long previousMillis[3] = {0, 0, 0};
 
+void flicker();
 
 void setup() {
   pinMode(dOutput[0], OUTPUT);
@@ -36,15 +37,7 @@ void setup() {
 
 void loop(){
   String t;
-  int on;
   int i;
-  EEPROM.get(onAddress,on);
-  EEPROM.get(sleepAddress,sleepTime[0]);
-  int potOn;
-  EEPROM.get(potAddress,potOn);
-  Serial.println(on);
-  Serial.println(potOn);
-  Serial.println(sleepTime[0]);
   unsigned long currentMillis = 0;
 
   while(1){
@@ -59,8 +52,17 @@ void loop(){
         if(currentMillis - previousMillis[i] >= onTime[i]){
           digitalWrite(dOutput[i], LOW);
           previousMillis[i] = currentMillis;
+          if(i==1){
+            flicker();
+          }
         }
       }
     }
   }
+}
+
+void flicker(){
+  sleepTime[1]=500;
+  onTime[1]=random(3000,20000);
+  Serial.println(onTime[1]);
 }
